@@ -1,39 +1,66 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
-import TabsPage from '../views/TabsPage.vue'
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/tab1'
+    redirect: '/login'
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/LoginPage.vue')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/RegisterPage.vue')
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('@/views/ResetPasswordPage.vue')
   },
   {
     path: '/tabs/',
-    component: TabsPage,
+    component: () => import('@/views/TabsPage.vue'),
     children: [
       {
-        path: '',
-        redirect: '/tabs/tab1'
-      },
-      {
         path: 'tab1',
+        name: 'Tab1',
         component: () => import('@/views/Tab1Page.vue')
       },
       {
         path: 'tab2',
+        name: 'Tab2',
         component: () => import('@/views/Tab2Page.vue')
       },
       {
         path: 'tab3',
+        name: 'Tab3',
         component: () => import('@/views/Tab3Page.vue')
       }
     ]
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('auth_user');
+  
+  if (to.path !== '/login' && to.path !== '/register' && to.path !== '/reset-password') {
+    if (!isAuthenticated) {
+      next('/login');
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
