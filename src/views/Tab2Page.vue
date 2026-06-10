@@ -35,12 +35,11 @@ import { useAlbum } from '@/composables/useAlbum';
 
 const { stickers, toggleCollected } = useAlbum();
 
-// Usando 'collected' (versão antiga) em vez de 'coletada'
 const collectedStickers = computed(() => 
-  stickers.value.filter(s => s.collected === true)
+  stickers.value.filter(s => s.coletada === true)
 );
 
-const handleToggle = (id: string) => {
+const handleToggle = (id: number) => {
   toggleCollected(id);
 };
 </script>
@@ -59,7 +58,7 @@ const handleToggle = (id: string) => {
 }
 .stickers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
 }
 </style>

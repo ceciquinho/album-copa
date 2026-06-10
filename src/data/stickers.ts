@@ -1,28 +1,106 @@
-import { Sticker } from '@/types';
-
-export const stickersData: Sticker[] = [
-  // Brasil
-  { id: '1', name: 'Neymar Jr', country: 'Brasil', countryCode: 'BR', photo: 'https://randomuser.me/api/portraits/men/1.jpg', collected: false, number: 10 },
-  { id: '2', name: 'Vinícius Jr', country: 'Brasil', countryCode: 'BR', photo: 'https://randomuser.me/api/portraits/men/2.jpg', collected: false, number: 7 },
-  { id: '3', name: 'Casemiro', country: 'Brasil', countryCode: 'BR', photo: 'https://randomuser.me/api/portraits/men/3.jpg', collected: false, number: 5 },
-  { id: '4', name: 'Alisson', country: 'Brasil', countryCode: 'BR', photo: 'https://randomuser.me/api/portraits/men/4.jpg', collected: false, number: 1 },
-  
-  // Argentina
-  { id: '5', name: 'Lionel Messi', country: 'Argentina', countryCode: 'AR', photo: 'https://randomuser.me/api/portraits/men/5.jpg', collected: false, number: 10 },
-  { id: '6', name: 'Ángel Di María', country: 'Argentina', countryCode: 'AR', photo: 'https://randomuser.me/api/portraits/men/6.jpg', collected: false, number: 11 },
-  { id: '7', name: 'Enzo Fernández', country: 'Argentina', countryCode: 'AR', photo: 'https://randomuser.me/api/portraits/men/7.jpg', collected: false, number: 24 },
-  
-  // França
-  { id: '8', name: 'Kylian Mbappé', country: 'França', countryCode: 'FR', photo: 'https://randomuser.me/api/portraits/men/8.jpg', collected: false, number: 10 },
-  { id: '9', name: 'Antoine Griezmann', country: 'França', countryCode: 'FR', photo: 'https://randomuser.me/api/portraits/men/9.jpg', collected: false, number: 7 },
-  
-  // Portugal
-  { id: '10', name: 'Cristiano Ronaldo', country: 'Portugal', countryCode: 'PT', photo: 'https://randomuser.me/api/portraits/men/10.jpg', collected: false, number: 7 },
-  { id: '11', name: 'Bruno Fernandes', country: 'Portugal', countryCode: 'PT', photo: 'https://randomuser.me/api/portraits/men/11.jpg', collected: false, number: 8 },
-  
-  // Inglaterra
-  { id: '12', name: 'Harry Kane', country: 'Inglaterra', countryCode: 'GB', photo: 'https://randomuser.me/api/portraits/men/12.jpg', collected: false, number: 9 },
-  
-  // Alemanha
-  { id: '13', name: 'Joshua Kimmich', country: 'Alemanha', countryCode: 'DE', photo: 'https://randomuser.me/api/portraits/men/13.jpg', collected: false, number: 6 },
+export const stickers = [
+  {
+    id: 1,
+    nome: "Neymar Jr",
+    selecao: "Brasil",
+    coletada: false,
+    raridade: "Brilhante",
+    foto: "https://images.hdqwalls.com/wallpapers/neymar-jr-fifa-world-cup-qatar-03.jpg"
+  },
+  {
+    id: 2,
+    nome: "Vinicius Jr",
+    selecao: "Brasil",
+    coletada: false,
+    raridade: "Rara",
+    foto: "https://th.bing.com/th/id/R.c25262870835a9c17483fe83813e1767?rik=z7l%2f7lsPeZIIwQ&pid=ImgRaw&r=0"
+  },
+  {
+    id: 3,
+    nome: "Casemiro",
+    selecao: "Brasil",
+    coletada: false,
+    raridade: "Comum",
+    foto: "https://randomuser.me/api/portraits/men/3.jpg"
+  },
+  {
+    id: 4,
+    nome: "Alisson",
+    selecao: "Brasil",
+    coletada: false,
+    raridade: "Comum",
+    foto: "https://randomuser.me/api/portraits/men/4.jpg"
+  },
+  {
+    id: 5,
+    nome: "Messi",
+    selecao: "Argentina",
+    coletada: false,
+    raridade: "Brilhante",
+    foto: "https://static.foxnews.com/foxnews.com/content/uploads/2022/12/lionel-messi1.jpg"
+  },
+  {
+    id: 6,
+    nome: "Di María",
+    selecao: "Argentina",
+    coletada: false,
+    raridade: "Rara",
+    foto: "https://randomuser.me/api/portraits/men/6.jpg"
+  },
+  {
+    id: 7,
+    nome: "Enzo Fernández",
+    selecao: "Argentina",
+    coletada: false,
+    raridade: "Comum",
+    foto: "https://randomuser.me/api/portraits/men/7.jpg"
+  },
+  {
+    id: 8,
+    nome: "Mbappé",
+    selecao: "França",
+    coletada: false,
+    raridade: "Brilhante",
+    foto: "https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/bltf952620424022964/639f4446b5425c668e5f7b82/GettyImages-1450088331.jpg"
+  },
+  {
+    id: 9,
+    nome: "Griezmann",
+    selecao: "França",
+    coletada: false,
+    raridade: "Rara",
+    foto: "https://randomuser.me/api/portraits/men/9.jpg"
+  },
+  {
+    id: 10,
+    nome: "Cristiano Ronaldo",
+    selecao: "Portugal",
+    coletada: false,
+    raridade: "Brilhante",
+    foto: "https://s2-monet.glbimg.com/sj2rub6OvBpKnCQG1ee3n_8jbKc=/0x0:3500x2335/1000x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e7c91519bbbb4fadb4e509085746275d/internal_photos/bs/2025/V/p/rSTSLQT5AZw3nORUFKvQ/gettyimages-2247340680.jpg"
+  },
+  {
+    id: 11,
+    nome: "Bruno Fernandes",
+    selecao: "Portugal",
+    coletada: false,
+    raridade: "Rara",
+    foto: "https://randomuser.me/api/portraits/men/11.jpg"
+  },
+  {
+    id: 12,
+    nome: "Harry Kane",
+    selecao: "Inglaterra",
+    coletada: false,
+    raridade: "Rara",
+    foto: "https://randomuser.me/api/portraits/men/12.jpg"
+  },
+  {
+    id: 13,
+    nome: "Joshua Kimmich",
+    selecao: "Alemanha",
+    coletada: false,
+    raridade: "Comum",
+    foto: "https://randomuser.me/api/portraits/men/13.jpg"
+  }
 ];

@@ -33,6 +33,11 @@
           </ion-card-content>
         </ion-card>
 
+        <ion-button expand="block" color="medium" router-link="/tabs/tab4">
+          <ion-icon :icon="informationCircleOutline" slot="start" />
+          Sobre o App
+        </ion-button>
+
         <ion-button expand="block" color="danger" @click="handleLogout">
           <ion-icon :icon="logOutOutline" slot="start" />
           Sair da Conta
@@ -44,7 +49,7 @@
 
 <script setup lang="ts">
 import { IonPage, IonContent, IonAvatar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon } from '@ionic/vue';
-import { logOutOutline } from 'ionicons/icons';
+import { logOutOutline, informationCircleOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import AppHeader from '@/components/AppHeader.vue';
 import { useAuth } from '@/composables/useAuth';

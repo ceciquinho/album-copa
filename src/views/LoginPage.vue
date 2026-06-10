@@ -18,6 +18,7 @@ import LoginForm from '@/components/LoginForm.vue';
 const router = useRouter();
 
 const handleLoginSuccess = () => {
+  console.log('Login success, redirecionando...');
   router.push('/tabs/tab1');
 };
 

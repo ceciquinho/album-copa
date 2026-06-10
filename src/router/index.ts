@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import type { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'tab3',
         name: 'Tab3',
         component: () => import('@/views/Tab3Page.vue')
+      },
+      {
+        path: 'tab4',
+        name: 'Tab4',
+        component: () => import('@/views/AboutPage.vue')
       }
     ]
   }
@@ -49,6 +54,7 @@ const router = createRouter({
   routes
 });
 
+// Guard para rotas protegidas
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('auth_user');
   

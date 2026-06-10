@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuth } from '@/composables/useAuth';
+import { useAuth } from '../composables/useAuth';
 
 const emit = defineEmits(['loginSuccess', 'goToRegister', 'goToResetPassword']);
 const email = ref('');
@@ -55,7 +55,10 @@ const password = ref('');
 const { login, errorMessage } = useAuth();
 
 const handleSubmit = () => {
-  if (login(email.value, password.value)) {
+  console.log('Tentando login com:', email.value, password.value);
+  const success = login(email.value, password.value);
+  console.log('Login success:', success);
+  if (success) {
     emit('loginSuccess');
   }
 };
@@ -78,10 +81,10 @@ const handleSubmit = () => {
 
 .form-card {
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   background: white;
   border-radius: 20px;
-  padding: 28px 24px;
+  padding: 32px 24px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
@@ -115,7 +118,7 @@ const handleSubmit = () => {
 
 .input-field input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 12px 14px;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   font-size: 14px;
@@ -130,7 +133,7 @@ const handleSubmit = () => {
 
 .btn-primary {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -153,23 +156,23 @@ const handleSubmit = () => {
   color: #667eea;
   font-size: 13px;
   cursor: pointer;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .btn-link-small {
   width: 100%;
-  padding: 6px;
+  padding: 8px;
   background: none;
   border: none;
   color: #999;
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
 }
 
 .error-message {
   background: #fee;
   color: #c33;
-  padding: 8px;
+  padding: 10px;
   border-radius: 10px;
   margin-bottom: 12px;
   font-size: 12px;

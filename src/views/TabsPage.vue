@@ -17,6 +17,11 @@
           <ion-icon :icon="personOutline" />
           <ion-label>Perfil</ion-label>
         </ion-tab-button>
+
+        <ion-tab-button tab="tab4" href="/tabs/tab4">
+          <ion-icon :icon="informationCircleOutline" />
+          <ion-label>Sobre</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
@@ -24,5 +29,5 @@
 
 <script setup lang="ts">
 import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
-import { albumsOutline, checkmarkCircleOutline, personOutline } from 'ionicons/icons';
+import { albumsOutline, checkmarkCircleOutline, personOutline, informationCircleOutline } from 'ionicons/icons';
 </script>

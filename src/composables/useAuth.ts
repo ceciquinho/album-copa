@@ -1,14 +1,12 @@
 import { ref, computed } from 'vue';
 
-const STORAGE_KEY = 'auth_user';
-
 export function useAuth() {
   const user = ref<any>(null);
   const isAuthenticated = computed(() => !!user.value);
   const errorMessage = ref('');
 
   const loadUser = () => {
-    const savedUser = localStorage.getItem(STORAGE_KEY);
+    const savedUser = localStorage.getItem('auth_user');
     if (savedUser) {
       user.value = JSON.parse(savedUser);
     }
@@ -31,8 +29,9 @@ export function useAuth() {
       return false;
     }
 
-    const passwordStrength = /^(?=.*[A-Za-z])(?=.*\d)/;
-    if (!passwordStrength.test(password)) {
+    const hasLetter = /[A-Za-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    if (!hasLetter || !hasNumber) {
       errorMessage.value = 'A senha deve conter letras e números';
       return false;
     }
@@ -43,18 +42,12 @@ export function useAuth() {
       return false;
     }
 
-    const newUser = {
-      id: Date.now().toString(),
-      name,
-      email,
-      password
-    };
-
+    const newUser = { id: Date.now().toString(), name, email, password };
     existingUsers.push(newUser);
     localStorage.setItem('users', JSON.stringify(existingUsers));
     
-    user.value = { ...newUser, password: '' };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...newUser, password: '' }));
+    user.value = { id: newUser.id, name: newUser.name, email: newUser.email };
+    localStorage.setItem('auth_user', JSON.stringify({ id: newUser.id, name: newUser.name, email: newUser.email }));
     
     errorMessage.value = '';
     return true;
@@ -70,8 +63,8 @@ export function useAuth() {
     const foundUser = users.find((u: any) => u.email === email && u.password === password);
 
     if (foundUser) {
-      user.value = { ...foundUser, password: '' };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...foundUser, password: '' }));
+      user.value = { id: foundUser.id, name: foundUser.name, email: foundUser.email };
+      localStorage.setItem('auth_user', JSON.stringify({ id: foundUser.id, name: foundUser.name, email: foundUser.email }));
       errorMessage.value = '';
       return true;
     }
@@ -82,7 +75,7 @@ export function useAuth() {
 
   const logout = () => {
     user.value = null;
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('auth_user');
   };
 
   const resetPassword = (email: string): boolean => {
@@ -95,7 +88,7 @@ export function useAuth() {
     const userExists = users.some((u: any) => u.email === email);
 
     if (userExists) {
-      console.log(`[SIMULAÇÃO] E-mail de redefinição enviado para: ${email}`);
+      alert(`E-mail de recuperação enviado para: ${email}`);
       errorMessage.value = '';
       return true;
     }
@@ -106,13 +99,5 @@ export function useAuth() {
 
   loadUser();
 
-  return {
-    user,
-    isAuthenticated,
-    errorMessage,
-    register,
-    login,
-    logout,
-    resetPassword
-  };
+  return { user, isAuthenticated, errorMessage, register, login, logout, resetPassword };
 }
