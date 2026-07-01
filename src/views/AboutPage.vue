@@ -41,7 +41,7 @@
           </ion-card-header>
           <ion-card-content>
             <p><strong>Tecnologias:</strong> Vue 3, Ionic Framework, TypeScript, Vue Router</p>
-            <p><strong>Aluno:</strong> Lucas Cunha</p>
+            <p><strong>Aluno:</strong> Lucas da Cunha</p>
             <p><strong>Curso:</strong> Codificar aplicações para dispositivos móveis</p>
           </ion-card-content>
         </ion-card>
