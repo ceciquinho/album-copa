@@ -115,7 +115,7 @@
         </ul>
 
         <h3>3. Armazenamento de Dados</h3>
-        <p>Seus dados são armazenados localmente no seu dispositivo (localStorage). Não enviamos seus dados para servidores externos.</p>
+        <p>Seus dados são armazenados localmente no seu dispositivo em banco SQLite. Não enviamos seus dados para servidores externos.</p>
 
         <h3>4. Compartilhamento de Dados</h3>
         <p>Não compartilhamos suas informações com terceiros.</p>

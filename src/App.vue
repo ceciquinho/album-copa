@@ -1,6 +1,7 @@
 <template>
   <ion-app>
     <ion-router-outlet />
+    <jeep-sqlite />
   </ion-app>
 </template>
 

@@ -43,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'tab4',
         name: 'Tab4',
+        component: () => import('@/views/AchievementsPage.vue')
+      },
+      {
+        path: 'tab5',
+        name: 'Tab5',
         component: () => import('@/views/AboutPage.vue')
       }
     ]
@@ -56,7 +61,7 @@ const router = createRouter({
 
 // Guard para rotas protegidas
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('auth_user');
+  const isAuthenticated = localStorage.getItem('auth_user_id');
   
   if (to.path !== '/login' && to.path !== '/register' && to.path !== '/reset-password') {
     if (!isAuthenticated) {

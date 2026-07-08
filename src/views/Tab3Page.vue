@@ -33,7 +33,7 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-button expand="block" color="medium" router-link="/tabs/tab4">
+        <ion-button expand="block" color="medium" router-link="/tabs/tab5">
           <ion-icon :icon="informationCircleOutline" slot="start" />
           Sobre o App
         </ion-button>

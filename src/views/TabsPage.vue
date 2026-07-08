@@ -19,6 +19,11 @@
         </ion-tab-button>
 
         <ion-tab-button tab="tab4" href="/tabs/tab4">
+          <ion-icon :icon="trophyOutline" />
+          <ion-label>Conquistas</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="tab5" href="/tabs/tab5">
           <ion-icon :icon="informationCircleOutline" />
           <ion-label>Sobre</ion-label>
         </ion-tab-button>
@@ -29,5 +34,5 @@
 
 <script setup lang="ts">
 import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
-import { albumsOutline, checkmarkCircleOutline, personOutline, informationCircleOutline } from 'ionicons/icons';
+import { albumsOutline, checkmarkCircleOutline, personOutline, informationCircleOutline, trophyOutline } from 'ionicons/icons';
 </script>

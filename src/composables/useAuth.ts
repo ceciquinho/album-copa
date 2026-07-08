@@ -1,18 +1,39 @@
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
+import { createUserStickerRows, getDb, recalculateAchievements, saveDb } from '@/services/database';
+
+const user = ref<any>(null);
+const errorMessage = ref('');
+let loadPromise: Promise<void> | null = null;
+
+const loadUser = async () => {
+  const sessionUserId = localStorage.getItem('auth_user_id');
+  if (!sessionUserId) {
+    user.value = null;
+    return;
+  }
+
+  const db = await getDb();
+  const result = await db.query('SELECT id, name, email FROM users WHERE id = ?', [sessionUserId]);
+
+  if (result.values?.[0]) {
+    user.value = result.values[0];
+  } else {
+    user.value = null;
+    localStorage.removeItem('auth_user_id');
+  }
+};
 
 export function useAuth() {
-  const user = ref<any>(null);
   const isAuthenticated = computed(() => !!user.value);
-  const errorMessage = ref('');
 
-  const loadUser = () => {
-    const savedUser = localStorage.getItem('auth_user');
-    if (savedUser) {
-      user.value = JSON.parse(savedUser);
+  const ensureLoaded = async () => {
+    if (!loadPromise) {
+      loadPromise = loadUser();
     }
+    await loadPromise;
   };
 
-  const register = (name: string, email: string, password: string): boolean => {
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
     if (!name || !email || !password) {
       errorMessage.value = 'Todos os campos são obrigatórios';
       return false;
@@ -36,35 +57,52 @@ export function useAuth() {
       return false;
     }
 
-    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    if (existingUsers.some((u: any) => u.email === email)) {
+    const db = await getDb();
+    const existingUser = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (existingUser.values?.length) {
       errorMessage.value = 'E-mail já cadastrado';
       return false;
     }
 
-    const newUser = { id: Date.now().toString(), name, email, password };
-    existingUsers.push(newUser);
-    localStorage.setItem('users', JSON.stringify(existingUsers));
-    
+    const newUser = {
+      id: `${Date.now()}`,
+      name,
+      email,
+      password,
+    };
+
+    await db.run(
+      'INSERT INTO users (id, name, email, password, created_at) VALUES (?, ?, ?, ?, ?)',
+      [newUser.id, newUser.name, newUser.email, newUser.password, new Date().toISOString()],
+    );
+    await createUserStickerRows(newUser.id);
+    await recalculateAchievements(newUser.id);
+    await saveDb();
+
     user.value = { id: newUser.id, name: newUser.name, email: newUser.email };
-    localStorage.setItem('auth_user', JSON.stringify({ id: newUser.id, name: newUser.name, email: newUser.email }));
-    
+    localStorage.setItem('auth_user_id', newUser.id);
     errorMessage.value = '';
     return true;
   };
 
-  const login = (email: string, password: string): boolean => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     if (!email || !password) {
       errorMessage.value = 'Preencha todos os campos';
       return false;
     }
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const foundUser = users.find((u: any) => u.email === email && u.password === password);
+    const db = await getDb();
+    const result = await db.query(
+      'SELECT id, name, email FROM users WHERE email = ? AND password = ?',
+      [email, password],
+    );
+    const foundUser = result.values?.[0];
 
     if (foundUser) {
-      user.value = { id: foundUser.id, name: foundUser.name, email: foundUser.email };
-      localStorage.setItem('auth_user', JSON.stringify({ id: foundUser.id, name: foundUser.name, email: foundUser.email }));
+      user.value = foundUser;
+      localStorage.setItem('auth_user_id', foundUser.id);
+      await createUserStickerRows(foundUser.id);
+      await recalculateAchievements(foundUser.id);
       errorMessage.value = '';
       return true;
     }
@@ -75,19 +113,19 @@ export function useAuth() {
 
   const logout = () => {
     user.value = null;
-    localStorage.removeItem('auth_user');
+    localStorage.removeItem('auth_user_id');
   };
 
-  const resetPassword = (email: string): boolean => {
+  const resetPassword = async (email: string): Promise<boolean> => {
     if (!email) {
       errorMessage.value = 'Digite seu e-mail';
       return false;
     }
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userExists = users.some((u: any) => u.email === email);
+    const db = await getDb();
+    const result = await db.query('SELECT id FROM users WHERE email = ?', [email]);
 
-    if (userExists) {
+    if (result.values?.length) {
       alert(`E-mail de recuperação enviado para: ${email}`);
       errorMessage.value = '';
       return true;
@@ -97,7 +135,16 @@ export function useAuth() {
     return false;
   };
 
-  loadUser();
+  ensureLoaded();
 
-  return { user, isAuthenticated, errorMessage, register, login, logout, resetPassword };
+  return {
+    user,
+    isAuthenticated,
+    errorMessage,
+    ensureLoaded,
+    register,
+    login,
+    logout,
+    resetPassword,
+  };
 }

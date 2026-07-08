@@ -29,8 +29,8 @@
           {{ errorMessage }}
         </div>
 
-        <button type="submit" class="btn-primary">
-          Entrar
+        <button type="submit" class="btn-primary" :disabled="isSubmitting">
+          {{ isSubmitting ? 'Entrando...' : 'Entrar' }}
         </button>
 
         <button type="button" class="btn-link" @click="$emit('goToRegister')">
@@ -52,12 +52,13 @@ import { useAuth } from '../composables/useAuth';
 const emit = defineEmits(['loginSuccess', 'goToRegister', 'goToResetPassword']);
 const email = ref('');
 const password = ref('');
+const isSubmitting = ref(false);
 const { login, errorMessage } = useAuth();
 
-const handleSubmit = () => {
-  console.log('Tentando login com:', email.value, password.value);
-  const success = login(email.value, password.value);
-  console.log('Login success:', success);
+const handleSubmit = async () => {
+  isSubmitting.value = true;
+  const success = await login(email.value, password.value);
+  isSubmitting.value = false;
   if (success) {
     emit('loginSuccess');
   }
@@ -146,6 +147,11 @@ const handleSubmit = () => {
 
 .btn-primary:active {
   transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .btn-link {

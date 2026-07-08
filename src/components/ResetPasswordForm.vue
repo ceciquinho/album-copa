@@ -17,8 +17,8 @@
         </ion-text>
 
         <div class="button-group">
-          <ion-button type="submit" expand="block" color="primary" :disabled="!email">
-            Enviar e-mail
+          <ion-button type="submit" expand="block" color="primary" :disabled="isSubmitting || !email">
+            {{ isSubmitting ? 'Enviando...' : 'Enviar e-mail' }}
           </ion-button>
           <ion-button fill="clear" expand="block" @click="$emit('goToLogin')">
             Voltar para o login
@@ -36,10 +36,14 @@ import { useAuth } from '@/composables/useAuth';
 
 const emit = defineEmits(['resetSent', 'goToLogin']);
 const email = ref('');
+const isSubmitting = ref(false);
 const { resetPassword, errorMessage } = useAuth();
 
-const handleSubmit = () => {
-  if (resetPassword(email.value)) {
+const handleSubmit = async () => {
+  isSubmitting.value = true;
+  const success = await resetPassword(email.value);
+  isSubmitting.value = false;
+  if (success) {
     emit('resetSent');
   }
 };

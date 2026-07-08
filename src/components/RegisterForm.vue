@@ -2,45 +2,29 @@
   <div class="register-container">
     <div class="form-card">
       <div class="logo-section">
-        <h1>🏆 Álbum da Copa</h1>
+        <h1>Álbum da Copa</h1>
         <p>Crie sua conta</p>
       </div>
 
       <form @submit.prevent="handleSubmit">
         <div class="input-field">
           <label>Nome completo</label>
-          <input 
-            v-model="name" 
-            type="text" 
-            placeholder="Seu nome"
-          />
+          <input v-model="name" type="text" placeholder="Seu nome" />
         </div>
 
         <div class="input-field">
           <label>E-mail</label>
-          <input 
-            v-model="email" 
-            type="email" 
-            placeholder="seu@email.com"
-          />
+          <input v-model="email" type="email" placeholder="seu@email.com" />
         </div>
 
         <div class="input-field">
           <label>Senha</label>
-          <input 
-            v-model="password" 
-            type="password" 
-            placeholder="Digite sua senha"
-          />
+          <input v-model="password" type="password" placeholder="Digite sua senha" />
         </div>
 
         <div class="input-field">
           <label>Confirmar senha</label>
-          <input 
-            v-model="confirmPassword" 
-            type="password" 
-            placeholder="Confirme sua senha"
-          />
+          <input v-model="confirmPassword" type="password" placeholder="Confirme sua senha" />
         </div>
 
         <div v-if="errorMessage" class="error-message">
@@ -48,14 +32,14 @@
         </div>
 
         <div v-if="password && password.length >= 6 && /^(?=.*[A-Za-z])(?=.*\d)/.test(password)" class="success-message">
-          ✓ Senha forte (letras e números)
+          Senha forte (letras e números)
         </div>
         <div v-else-if="password && password.length >= 6" class="warning-message">
-          ⚠ Adicione números para uma senha mais forte
+          Adicione números para uma senha mais forte
         </div>
 
-        <button type="submit" class="btn-primary" :disabled="!name || !email || !password || password !== confirmPassword">
-          Cadastrar
+        <button type="submit" class="btn-primary" :disabled="isSubmitting || !name || !email || !password || password !== confirmPassword">
+          {{ isSubmitting ? 'Cadastrando...' : 'Cadastrar' }}
         </button>
 
         <button type="button" class="btn-link" @click="$emit('goToLogin')">
@@ -75,14 +59,20 @@ const name = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const isSubmitting = ref(false);
 const { register, errorMessage } = useAuth();
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (password.value !== confirmPassword.value) {
     errorMessage.value = 'As senhas não coincidem';
     return;
   }
-  if (register(name.value, email.value, password.value)) {
+
+  isSubmitting.value = true;
+  const success = await register(name.value, email.value, password.value);
+  isSubmitting.value = false;
+
+  if (success) {
     emit('registerSuccess');
   }
 };
