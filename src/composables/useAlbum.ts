@@ -51,32 +51,45 @@ export function useAlbum() {
     await loadPromise;
   };
 
-  const toggleCollected = async (id: number) => {
-    const userId = getCurrentUserId();
-    if (!userId) {
-      return;
-    }
+ const toggleCollected = async (id: number) => {
+  const userId = getCurrentUserId();
 
-    const sticker = stickersList.value.find(s => Number(s.id) === Number(id));
-    if (!sticker) {
-      return;
-    }
+  if (!userId) {
+    return;
+  }
 
-    const nextCollected = !sticker.coletada;
-    const db = await getDb();
-    await db.run(
-      `INSERT INTO user_stickers (user_id, sticker_id, coletada, updated_at)
-       VALUES (?, ?, ?, ?)
-       ON CONFLICT(user_id, sticker_id) DO UPDATE SET
-        coletada = excluded.coletada,
-        updated_at = excluded.updated_at`,
-      [userId, id, nextCollected ? 1 : 0, new Date().toISOString()],
-    );
+  const sticker = stickersList.value.find(
+    s => Number(s.id) === Number(id)
+  );
 
-    sticker.coletada = nextCollected;
-    await recalculateAchievements(userId);
-    await saveDb();
-  };
+  if (!sticker) {
+    return;
+  }
+
+  const nextCollected = !sticker.coletada;
+
+  const db = await getDb();
+
+  await db.run(
+    `INSERT INTO user_stickers (user_id, sticker_id, coletada, updated_at)
+     VALUES (?, ?, ?, ?)
+     ON CONFLICT(user_id, sticker_id) DO UPDATE SET
+      coletada = excluded.coletada,
+      updated_at = excluded.updated_at`,
+    [
+      userId,
+      id,
+      nextCollected ? 1 : 0,
+      new Date().toISOString()
+    ],
+  );
+
+  sticker.coletada = nextCollected;
+
+  await saveDb();
+
+  await recalculateAchievements(userId);
+};
 
   const refresh = async () => {
     loadPromise = loadStickers();

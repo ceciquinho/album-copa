@@ -21,7 +21,6 @@
     "@capacitor/keyboard": "8.0.3",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/status-bar": "8.0.2",
-    "@capacitor/storage": "^1.2.5",
     "@ionic/vue": "^8.8.9",
     "@ionic/vue-router": "^8.8.9",
     "install": "^0.13.0",

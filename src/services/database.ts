@@ -237,3 +237,54 @@ export const recalculateAchievements = async (userId: string) => {
 
   await persistWebStore();
 };
+
+export const getAchievements = async (userId: string) => {
+
+  const connection = await getDb();
+
+
+  const result = await connection.query(
+    `
+    SELECT
+      a.id,
+      a.nome,
+      a.descricao,
+      a.icone,
+      a.criterio,
+      a.valor,
+      a.selecao,
+      ua.data_desbloqueio,
+
+      CASE
+        WHEN ua.id IS NULL THEN 0
+        ELSE 1
+      END AS desbloqueada
+
+    FROM achievements a
+
+    LEFT JOIN user_achievements ua
+
+      ON ua.achievement_id = a.id
+
+      AND ua.user_id = ?
+
+    ORDER BY 
+      desbloqueada DESC,
+      a.nome
+
+    `,
+    [userId]
+  );
+
+
+  return (result.values ?? []).map(
+    (achievement: any) => ({
+      ...achievement,
+
+      desbloqueada:
+        Number(achievement.desbloqueada) === 1,
+
+    })
+  );
+
+};
