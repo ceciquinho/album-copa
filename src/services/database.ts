@@ -48,7 +48,7 @@ export const getDb = async () => {
   return db;
 };
 
-const initDatabase = async () => {
+export const initDatabase = async () => {
   if (isWeb()) {
     await sqlite.initWebStore();
   }
